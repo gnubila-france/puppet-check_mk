@@ -22,11 +22,7 @@
 define check_mk::agent::mrpe (
   $command,
 ) {
-  $mrpe_config_file = $::operatingsystem ? {
-    centos  => '/etc/check-mk-agent/mrpe.cfg',
-    redhat  => '/etc/check-mk-agent/mrpe.cfg',
-    default => undef,
-  }
+  $mrpe_config_file = "${check_mk::agent::config_dir}/mrpe.cfg"
 
   if ( $mrpe_config_file ) {
     if ! defined(Concat[$mrpe_config_file]) {

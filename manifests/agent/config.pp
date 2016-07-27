@@ -31,37 +31,39 @@ class check_mk::agent::config (
   $use_cache    = $check_mk::agent::use_cache,
   $user         = $check_mk::agent::user,
 ) inherits check_mk::agent {
-  if $use_cache {
-    $server = "${server_dir}/check_mk_caching_agent"
-  } else {
-    $server = "${server_dir}/check_mk_agent"
-  }
+  if $check_mk::agent::manage_config {
+    if $use_cache {
+      $server = "${server_dir}/check_mk_caching_agent"
+    } else {
+      $server = "${server_dir}/check_mk_agent"
+    }
 
-  if $ip_whitelist {
-    $only_from = join($ip_whitelist, ' ')
-  } else {
-    $only_from = undef
-  }
+    if $ip_whitelist {
+      $only_from = join($ip_whitelist, ' ')
+    } else {
+      $only_from = undef
+    }
 
-  $xinetd_file = $::osfamily ? {
-    'RedHat' => '/etc/xinetd.d/check-mk-agent',
-    default  => '/etc/xinetd.d/check_mk',
-  }
+    $xinetd_file = $::osfamily ? {
+      'RedHat' => '/etc/xinetd.d/check-mk-agent',
+      default  => '/etc/xinetd.d/check_mk',
+    }
 
-  file { $xinetd_file:
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0444',
-    content => template('check_mk/agent/check_mk.erb'),
-    require => Package['check_mk-agent'],
-    notify  => Class['check_mk::agent::service'],
-  }
+    file { $xinetd_file:
+      ensure  => 'file',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0444',
+      content => template('check_mk/agent/check_mk.erb'),
+      require => Package['check_mk-agent'],
+      notify  => Class['check_mk::agent::service'],
+    }
 
-  # Delete file from older check_mk package version
-  if $::osfamily == 'RedHat' {
-    file { '/etc/xinetd.d/check_mk':
-      ensure => 'absent',
+    # Delete file from older check_mk package version
+    if $::osfamily == 'RedHat' {
+      file { '/etc/xinetd.d/check_mk':
+        ensure => 'absent',
+      }
     }
   }
 }
