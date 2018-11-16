@@ -1,3 +1,5 @@
+# == Class: check_mk::agent::service
+#
 class check_mk::agent::service {
   if ! defined(Service['xinetd']) {
     if $::operatingsystem == 'Debian' and

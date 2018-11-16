@@ -1,3 +1,6 @@
+# == Class: check_mk::install_tarball
+#
+# Install check_mk through a tarball
 class check_mk::install_tarball (
   $filestore,
   $version,
@@ -45,7 +48,7 @@ class check_mk::install_tarball (
     require => File["${workspace}/check_mk-${version}.tar.gz"],
   }
   exec { 'change-setup-config-location':
-    command => "/usr/bin/perl -pi -e 's#^SETUPCONF=.*?$#SETUPCONF=${workspace}/check_mk_setup.conf#' ${workspace}/check_mk-${version}/setup.sh",
+    command => "/usr/bin/perl -pi -e 's#^SETUPCONF=.*?$#SETUPCONF=${workspace}/check_mk_setup.conf#' ${workspace}/check_mk-${version}/setup.sh", # lint:ignore:140chars
     unless  => "/bin/egrep '^SETUPCONF=${workspace}/check_mk_setup.conf$' ${workspace}/check_mk-${version}/setup.sh",
     require => Exec['unpack-check_mk-tarball'],
   }

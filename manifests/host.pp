@@ -1,3 +1,6 @@
+# == Class: check_mk::host
+#
+# Resource to create a check_mk host
 define check_mk::host (
   $target = undef,
   $host_tags = [],

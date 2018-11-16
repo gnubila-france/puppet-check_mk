@@ -2,5 +2,6 @@ fixtures:
   repositories:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     concat: "https://github.com/puppetlabs/puppetlabs-concat.git"
+    cron: "https://github.com/puppetlabs/puppetlabs-cron_core.git"
   symlinks:
     check_mk: "#{source_dir}"

@@ -1,3 +1,6 @@
+# == Class: check_mk
+#
+# Main check_mk class
 class check_mk (
   $checkmk_service  = $check_mk::params::checkmk_service,
   $filestore        = $check_mk::params::filestore,

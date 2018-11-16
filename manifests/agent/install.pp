@@ -1,3 +1,6 @@
+# == Class: check_mk::agent::install
+#
+# Install check_mk agent.
 class check_mk::agent::install (
   $version   = $check_mk::agent::version,
   $filestore = undef,

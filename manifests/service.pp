@@ -1,3 +1,6 @@
+# == Class: check_mk::service
+#
+# Configures the check mk service
 class check_mk::service (
   $checkmk_service,
   $httpd_service,

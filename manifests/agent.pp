@@ -1,3 +1,6 @@
+# == Class: check_mk::agent
+#
+# Configures and install the check_mk agent.
 class check_mk::agent (
   $filestore    = undef,
   $host_tags    = undef,

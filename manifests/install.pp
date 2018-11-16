@@ -1,3 +1,6 @@
+# == Class: check_mk::install
+#
+# Installs check_mk through a deb or rpm file
 class check_mk::install (
   $site,
   $workspace,

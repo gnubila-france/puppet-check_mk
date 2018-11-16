@@ -1,4 +1,6 @@
-
+# == Class: check_mk::config
+#
+# Configures checkmk
 class check_mk::config (
   $site,
   $host_groups = undef,

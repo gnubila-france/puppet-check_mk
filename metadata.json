@@ -10,18 +10,17 @@
   "dependencies": [
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.0.0 <5.0.0"
+      "version_requirement": ">= 4.0.0 <6.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 2.3.0 <5.0.0"
+      "version_requirement": ">= 4.0.0 <6.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5",
         "6",
         "7"
       ]
@@ -29,7 +28,6 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "5",
         "6",
         "7"
       ]
@@ -37,21 +35,22 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "8",
+        "9"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 7.0.0"
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     }
   ],
   "tags": [
     "check_mk",
     "monitoring",
-    "nagios"
+    "nagios",
+    "omd"
   ],
   "pdk-version": "1.7.1",
   "template-url": "file://C:/Program Files/Puppet Labs/DevelopmentKit/share/cache/pdk-templates.git",
