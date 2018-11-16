@@ -15,16 +15,17 @@ describe 'check_mk' do
           'package'   => 'omd-0.56',
           'site'      => 'monitoring',
           'workspace' => '/root/check_mk',
-          'before'    => 'Class[Check_mk::Config]',
         )
 
         is_expected.to contain_class('check_mk::config').with(
           'host_groups' => nil,
           'site'        => 'monitoring',
-          'before'      => 'Class[Check_mk::Service]',
+          'require'     => 'Class[Check_mk::Install]',
         )
 
-        is_expected.to contain_class('check_mk::service')
+        is_expected.to contain_class('check_mk::service').with(
+          'require' => 'Class[Check_mk::Config]',
+        )
       }
     end
   end
