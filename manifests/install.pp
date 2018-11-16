@@ -2,10 +2,10 @@
 #
 # Installs check_mk through a deb or rpm file
 class check_mk::install (
-  $site,
-  $workspace,
-  $filestore = undef,
-  $package = undef,
+  String $site,
+  Stdlib::Absolutepath $workspace,
+  Optional[Stdlib::Filesource] $filestore = undef,
+  String $package = undef,
 ) {
   if $filestore {
     if ! defined(File[$workspace]) {
@@ -18,16 +18,28 @@ class check_mk::install (
       source  => "${filestore}/${package}",
       require => File[$workspace],
     }
-    # omd-0.56-rh60-29.x86_64.rpm
-    if $package =~ /^(omd-\d+\.\d+)-(.*?)\.(rpm|deb)$/ {
-      $package_name = $1
-      $type         = $3
+
+    # check-mk-raw-1.5.0p7_0.stretch_amd64.deb
+    if $package =~ /^(check-mk-(\w*))-(\d*\.\d*\.\d*p\d*).+\.(deb)$/ {
+      case $4 {
+        'deb':     { 
+          $type = 'apt'
+          $package_name = "${workspace}/${package}"
+        }
+        'default': { 
+          $type = $4
+          $package_name = $1
+        }
+      }
+
       package { $package_name:
         ensure   => installed,
         provider => $type,
         source   => "${workspace}/${package}",
         require  => File["${workspace}/${package}"],
       }
+    } else {
+      fail('Package does not match format check-mk-raw-1.5.0p7_0.stretch_amd64.deb')
     }
   }
   else {
