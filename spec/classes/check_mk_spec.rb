@@ -10,7 +10,7 @@ describe 'check_mk' do
 
         is_expected.to contain_class('check_mk')
 
-        is_expected.to contain_class('check_mk::instal').with(
+        is_expected.to contain_class('check_mk::install').with(
           'filestore' => nil,
           'package'   => 'omd-0.56',
           'site'      => 'monitoring',
