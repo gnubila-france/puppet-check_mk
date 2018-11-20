@@ -24,8 +24,20 @@ describe 'check_mk' do
         )
 
         is_expected.to contain_class('check_mk::service').with(
-          'require' => 'Class[Check_mk::Config]',
+          'subscribe' => 'Class[Check_mk::Config]',
         )
+        case facts[:osfamily]
+        when 'RedHat'
+          is_expected.to contain_service('httpd').with(
+            'ensure'     => 'running',
+            'enable'     => 'true',
+          )
+        when 'Debian'
+          is_expected.to contain_service('apache2').with(
+            'ensure'     => 'running',
+            'enable'     => 'true',
+          )
+        end
       }
     end
   end

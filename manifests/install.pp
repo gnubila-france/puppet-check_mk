@@ -20,23 +20,29 @@ class check_mk::install (
     }
 
     # check-mk-raw-1.5.0p7_0.stretch_amd64.deb
-    if $package =~ /^(check-mk-(\w*))-(\d*\.\d*\.\d*p\d*).+\.(deb)$/ {
-      case $4 {
-        'deb':     { 
-          $type = 'apt'
-          $package_name = "${workspace}/${package}"
-        }
-        'default': { 
-          $type = $4
-          $package_name = $1
-        }
-      }
+    if $package =~ /^(check-mk-(\w*))-(\d*\.\d*\.\d*p\d*).+\.(\w+)$/ {
+      $type = $4
+      $package_name = $1
 
-      package { $package_name:
-        ensure   => installed,
-        provider => $type,
-        source   => "${workspace}/${package}",
-        require  => File["${workspace}/${package}"],
+      if $type == 'deb' {
+        package {'gdebi':
+          ensure => present
+        }
+
+        exec {'install-check-mk':
+          command => "/usr/bin/gdebi --non-interactive ${workspace}/${package}",
+          unless  => "/usr/bin/dpkg-query -W --showformat '\${Status} \${Package}\\n' | grep ${package_name} | grep -q 'install ok installed'", # lint:ignore:140chars
+          require => Package['gdebi'],
+          before  => Exec['omd-create-site'],
+        }
+      } else {
+        package { $package_name:
+          ensure   => installed,
+          provider => $type,
+          source   => "${workspace}/${package}",
+          require  => File["${workspace}/${package}"],
+          before   => Exec['omd-create-site'],
+        }
       }
     } else {
       fail('Package does not match format check-mk-raw-1.5.0p7_0.stretch_amd64.deb')
@@ -46,12 +52,12 @@ class check_mk::install (
     $package_name = $package
     package { $package_name:
       ensure => installed,
+      before => Exec['omd-create-site'],
     }
   }
   $etc_dir = "/omd/sites/${site}/etc"
   exec { 'omd-create-site':
     command => "/usr/bin/omd create ${site}",
     creates => $etc_dir,
-    require => Package[$package_name],
   }
 }
