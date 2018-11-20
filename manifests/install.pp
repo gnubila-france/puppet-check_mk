@@ -20,8 +20,8 @@ class check_mk::install (
     }
 
     # check-mk-raw-1.5.0p7_0.stretch_amd64.deb
-    if $package =~ /^(check-mk-(\w*))-(\d*\.\d*\.\d*p\d*).+\.(\w+)$/ {
-      $type = $4
+    if $package =~ /^(check-mk-(\w*))(-|_)(\d*\.\d*\.\d*p\d*).+\.(\w+)$/ {
+      $type = $5
       $package_name = $1
 
       if $type == 'deb' {
@@ -45,7 +45,7 @@ class check_mk::install (
         }
       }
     } else {
-      fail('Package does not match format check-mk-raw-1.5.0p7_0.stretch_amd64.deb')
+      fail('Package does not match format like check-mk-raw-1.5.0p7_0.stretch_amd64.deb')
     }
   }
   else {
