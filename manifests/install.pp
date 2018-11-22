@@ -4,7 +4,7 @@
 class check_mk::install (
   String $site,
   Stdlib::Absolutepath $workspace,
-  Optional[Stdlib::Filesource] $filestore = undef,
+  Optional[String] $filestore = undef,
   String $package = undef,
 ) {
   if $filestore {

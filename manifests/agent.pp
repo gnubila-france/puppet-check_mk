@@ -2,7 +2,7 @@
 #
 # Configures and install the check_mk agent.
 class check_mk::agent (
-  Optional[Stdlib::Filesource] $filestore         = undef,
+  Optional[String] $filestore         = undef,
   Optional[Array]              $host_tags         = undef,
   Stdlib::Absolutepath         $workspace         = '/root/check_mk',
   Optional[String]             $package           = 'check-mk-agent',
