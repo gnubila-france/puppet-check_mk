@@ -2,9 +2,9 @@
 #
 # Install check_mk agent.
 class check_mk::agent::install (
-  $filestore = undef,
+  $filestore = $check_mk::agent::filestore,
   $workspace = $check_mk::agent::workspace,
-  $package   = 'check-mk-agent',
+  $package   = $check_mk::agent::package,
 ) inherits check_mk::agent {
   if $filestore {
     if ! defined(File[$workspace]) {

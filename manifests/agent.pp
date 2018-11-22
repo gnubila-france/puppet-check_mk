@@ -5,7 +5,7 @@ class check_mk::agent (
   Optional[Stdlib::Filesource] $filestore         = undef,
   Optional[Array]              $host_tags         = undef,
   Stdlib::Absolutepath         $workspace         = '/root/check_mk',
-  Optional[String]             $package           = undef,
+  Optional[String]             $package           = 'check-mk-agent',
   Hash                         $mrpe_checks       = {},
   Optional[String]             $encryption_secret = undef,
   Stdlib::Absolutepath         $config_dir = $check_mk::agent::params::config_dir,
