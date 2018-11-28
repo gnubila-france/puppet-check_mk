@@ -12,6 +12,7 @@ class check_mk::agent::config (
   if $encryption_secret {
     file {'encryption_config':
       ensure  => file,
+      mode    => '0600',
       path    => "${config_dir}/encryption.cfg",
       content => template('check_mk/agent/encryption.cfg.erb'),
     }
