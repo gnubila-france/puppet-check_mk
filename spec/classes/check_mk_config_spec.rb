@@ -32,7 +32,7 @@ describe 'check_mk::config' do
           'owner'  => 'TEST_SITE',
           'group'  => 'TEST_SITE',
           'mode'   => '0644',
-        )
+        ).that_notifies('Exec[check_mk-reload]')
 
         is_expected.to contain_concat__fragment('all_hosts-header').with(
           'target'  => '/omd/sites/TEST_SITE/etc/check_mk/main.mk',
@@ -56,6 +56,11 @@ describe 'check_mk::config' do
           'source' => '/omd/sites/TEST_SITE/etc/check_mk/main.mk.local',
           'target' => '/omd/sites/TEST_SITE/etc/check_mk/main.mk',
           'order'  => 99,
+        )
+
+        is_expected.to contain_exec('check_mk-reload').with(
+          'command'     => '/bin/su -l -c \'/omd/sites/TEST_SITE/bin/check_mk --reload\' TEST_SITE',
+          'refreshonly' => true,
         )
 
         is_expected.not_to contain_file('/omd/sites/TEST_SITE/etc/nagios/local/hostgroups')

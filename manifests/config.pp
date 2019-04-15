@@ -22,9 +22,10 @@ class check_mk::config (
   }
 
   concat { "${etc_dir}/check_mk/main.mk":
-    owner => $site,
-    group => $site,
-    mode  => '0644',
+    owner  => $site,
+    group  => $site,
+    mode   => '0644',
+    notify => Exec['check_mk-reload'],
   }
 
   # # all_hosts
@@ -94,7 +95,12 @@ class check_mk::config (
     order  => 99,
   }
 
-  # In the original code 3 execs would be here, but is is not recommended
+  exec { 'check_mk-reload':
+    command     => "/bin/su -l -c '${bin_dir}/check_mk --reload' ${site}",
+    refreshonly => true,
+  }
+
+  # In the original code 2 execs would be here, but is is not recommended
   # to do a reindex, see https://mathias-kettner.de/checkmk_inventory.html
   # This breaks large installs. The services class is subscribed to the
   # config class so new changes should be noticed automatically.

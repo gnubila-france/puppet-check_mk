@@ -2,8 +2,8 @@
 #
 # Resource to create a check_mk host
 define check_mk::host (
-  $target = undef,
-  $host_tags = [],
+  Optional[String] $target = undef,
+  Optional[Array]  $host_tags = [],
 ) {
   $host = $title
   if size($host_tags) > 0 {
