@@ -52,7 +52,7 @@
     "nagios",
     "omd"
   ],
-  "pdk-version": "1.7.1",
-  "template-url": "file://C:/Program Files/Puppet Labs/DevelopmentKit/share/cache/pdk-templates.git",
-  "template-ref": "1.7.1-0-g810b982"
+  "pdk-version": "1.10.0",
+  "template-url": "C:\\Program Files\\Puppet Labs\\DevelopmentKit\\share\\cache\\pdk-templates.git#1.10.0",
+  "template-ref": "1.10.0-0-gbba9ac3"
 }
