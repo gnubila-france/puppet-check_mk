@@ -1,43 +1,38 @@
 require 'spec_helper'
-describe 'check_mk::agent', :type => :class do
-  context 'Redhat Linux' do
-    let :facts do
-      {
-          :kernel          => 'Linux',
-          :operatingsystem => 'Redhat',
-          :osfamily        => 'Redhat',
+
+describe 'check_mk::agent' do
+  on_supported_os.each do |os, os_facts|
+    context "with default parameters set on #{os}" do
+      let(:facts) { os_facts }
+
+      it {
+        is_expected.to compile
+        is_expected.to contain_class('check_mk::agent')
+        is_expected.to contain_class('check_mk::agent::install')
+        is_expected.to contain_class('check_mk::agent::config').that_requires('Class[check_mk::agent::install]')
       }
     end
-    context 'with defaults for all parameters' do
-      it { should contain_class('check_mk::agent') }
-      it { should contain_class('check_mk::agent::install').that_comes_before('Class[check_mk::agent::config]') }
-      it { should contain_class('check_mk::agent::config') }
-      it { should contain_class('check_mk::agent::service') }
-    end
-    context 'with mrpe_checks' do
-      context 'not a hash' do
-        let :params do
-          {
-              :mrpe_checks => 'not_a_hash',
-          }
-        end
-        it 'should fail' do
-          expect { catalogue }.to raise_error(Puppet::Error, /\"not_a_hash\" is not a Hash./)
-        end
+    context "with mrpe_checks on #{os}" do
+      let(:facts) { os_facts }
+      let(:params) do
+        {
+          mrpe_checks: {
+            check1: {
+              command: 'command1',
+            },
+            check2: {
+              command: 'command2',
+            },
+          },
+        }
       end
-      context 'defined correctly' do
-        let :params do
-          {
-              :mrpe_checks => {
-                  'check1' => {'command' => 'command1'},
-                  'check2' => {'command' => 'command2'},
-              }
-          }
-        end
-        it { should contain_class('check_mk::agent') }
-        it { should contain_check_mk__agent__mrpe('check1').with_command('command1') }
-        it { should contain_check_mk__agent__mrpe('check2').with_command('command2') }
-      end
+
+      it {
+        is_expected.to compile
+        is_expected.to contain_class('check_mk::agent')
+        is_expected.to contain_class('check_mk::agent::install')
+        is_expected.to contain_class('check_mk::agent::config').that_requires('Class[check_mk::agent::install]')
+      }
     end
   end
 end

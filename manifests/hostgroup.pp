@@ -1,3 +1,6 @@
+# == Class: check_mk::hostgroup
+#
+# Resource to create a hostgroup
 define check_mk::hostgroup (
   $dir,
   $hostgroups,

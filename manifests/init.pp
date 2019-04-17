@@ -1,3 +1,6 @@
+# == Class: check_mk
+#
+# Main check_mk class
 class check_mk (
   $checkmk_service  = $check_mk::params::checkmk_service,
   $filestore        = $check_mk::params::filestore,
@@ -22,6 +25,6 @@ class check_mk (
   class { 'check_mk::service':
     checkmk_service => $checkmk_service,
     httpd_service   => $httpd_service,
-    require         => Class['check_mk::config'],
+    subscribe       => Class['check_mk::config'],
   }
 }

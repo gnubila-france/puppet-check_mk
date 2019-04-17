@@ -1,3 +1,5 @@
+# == Class: check_mk::params
+#
 class check_mk::params {
 
   # common variables

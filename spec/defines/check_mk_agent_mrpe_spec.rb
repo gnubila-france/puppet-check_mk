@@ -1,34 +1,42 @@
 require 'spec_helper'
-describe 'check_mk::agent::mrpe', :type => :define do
-  let :title do
-    'checkname'
+
+describe 'check_mk::agent::mrpe' do
+  let(:pre_condition) do
+    "class { 'check_mk::agent': }"
   end
-  context 'Unsupported OS' do
-    context 'with mandatory command' do
-      let :params do
-        {:command => 'command'}
-      end
-      it 'should fail' do
-        expect { catalogue }.to raise_error(Puppet::Error, /Creating mrpe.cfg is unsupported for operatingsystem/)
-      end
-    end
+  let(:title) { 'check1' }
+  let(:params) do
+    {
+      command: 'command1',
+    }
   end
-  context 'RedHat Linux' do
-    let :facts do
-      {
-          :operatingsystem => 'redhat',
-      }
-    end
-    context 'with mandatory command' do
-      let :params do
-        {:command => 'command'}
-      end
-      it { should contain_check_mk__agent__mrpe('checkname') }
-      it { should contain_concat('/etc/check-mk-agent/mrpe.cfg').with_ensure('present') }
-      it { should contain_concat__fragment('checkname-mrpe-check').with({
-            :target  => '/etc/check-mk-agent/mrpe.cfg',
-            :content => /^checkname command\n$/,
-        })
+
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      let(:facts) { os_facts }
+
+      it {
+        is_expected.to compile
+        case facts[:osfamily]
+        when 'RedHat'
+          is_expected.to contain_concat('/etc/check-mk-agent/mrpe.cfg').with(
+            'ensure' => 'present',
+          )
+
+          is_expected.to contain_concat__fragment('check1-mrpe-check').with(
+            'target'  => '/etc/check-mk-agent/mrpe.cfg',
+            'content' => %r{check1 command1\n},
+          )
+        when 'Debian'
+          is_expected.to contain_concat('/etc/check_mk/mrpe.cfg').with(
+            'ensure' => 'present',
+          )
+
+          is_expected.to contain_concat__fragment('check1-mrpe-check').with(
+            'target'  => '/etc/check_mk/mrpe.cfg',
+            'content' => %r{check1 command1\n},
+          )
+        end
       }
     end
   end
