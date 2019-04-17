@@ -1,3 +1,7 @@
+**THIS MODULE IS DEPLRECATED AND NO MORE MAINTAINED.**
+
+**Please use: https://github.com/voxpupuli/puppet-check_mk**
+
 # check_mk
 
 [![Puppet Forge](http://img.shields.io/puppetforge/v/gnubilafrance/check_mk.svg)](https://forge.puppetlabs.com/gnubilafrance/check_mk)
